@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="true"
+        jar="/Users/tmvien/MyData/Project/KanjiCard/KanjiCards/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="f7ac4b327fdb9e2ee386f5adc46164927658de4b">
+        <dex dex="/Users/tmvien/MyData/Project/KanjiCard/KanjiCards/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-appcompat-v7-25.0.1_97ffc9ea8d6372fb4c7fbdb081a10dce3f03af8f/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/tmvien/MyData/Project/KanjiCard/KanjiCards/app/build/intermediates/exploded-aar/com.android.support/support-compat/25.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="51eba4a4dd73044f90a9d58dd7ca34adbebfcf4e">
+        <dex dex="/Users/tmvien/MyData/Project/KanjiCard/KanjiCards/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-compat-25.0.1_17fb504110f4e8113108c8c670cb5045353c9171/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/tmvien/MyData/Project/KanjiCard/KanjiCards/app/build/intermediates/exploded-aar/com.android.support/support-v4/25.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
+        <dex dex="/Users/tmvien/MyData/Project/KanjiCard/KanjiCards/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-v4-25.0.1_c3f111aa90c650210b74c37b06913a002d91454a/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/tmvien/MyData/Project/KanjiCard/KanjiCards/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="10729045188418addf5cf0e6c7991d710eab21c1">
+        <dex dex="/Users/tmvien/MyData/Project/KanjiCard/KanjiCards/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_70e7e9df5ffc5c63357e784be6739dc5b34a69f7/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/tmvien/MyData/Project/KanjiCard/KanjiCards/app/build/intermediates/exploded-aar/com.android.support/support-fragment/25.0.1/jars/libs/internal_impl-25.0.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="c0bd6ffb002a85b5e7cad29f8558d1cc59539679">
+        <dex dex="/Users/tmvien/MyData/Project/KanjiCard/KanjiCards/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-25.0.1_faea440471607bbbc4b77fd7cc7e2ccaf53441b8/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/tmvien/MyData/Project/KanjiCard/KanjiCards/app/build/intermediates/exploded-aar/com.android.support/support-media-compat/25.0.1/jars/libs/internal_impl-25.0.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="f83b00041ecfba705603fec40363416c7de69719">
+        <dex dex="/Users/tmvien/MyData/Project/KanjiCard/KanjiCards/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-25.0.1_fb59355fb0cfe2c428459864416cfb92afcee977/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/tmvien/MyData/Project/KanjiCard/KanjiCards/app/build/intermediates/exploded-aar/com.android.support/support-fragment/25.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="26c6eef571592c91f29e56fda0bac73321de0c92">
+        <dex dex="/Users/tmvien/MyData/Project/KanjiCard/KanjiCards/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-fragment-25.0.1_ab5434c1e72797bcbaa0d7bd80d680bea05be875/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/tmvien/MyData/Project/KanjiCard/KanjiCards/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/25.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="b24e1c688744078e1fa833ffadf696794761bbe5">
+        <dex dex="/Users/tmvien/MyData/Project/KanjiCard/KanjiCards/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-vector-drawable-25.0.1_33d2d8a00d0c7dbc2b8445e33b5051d72fc9e698/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/tmvien/MyData/Project/KanjiCard/KanjiCards/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="be32925b35c02613ee463f67200d1246148ad1d9">
+        <dex dex="/Users/tmvien/MyData/Project/KanjiCard/KanjiCards/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_25eebc0293f9dcad5ec9ce296e9a883b991407b5/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/tmvien/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/25.0.1/support-annotations-25.0.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="a09194311f8f89c3e6db09d79f50897a889d615e">
+        <dex dex="/Users/tmvien/MyData/Project/KanjiCard/KanjiCards/app/build/intermediates/transforms/dex/debug/folders/1000/10/support-annotations-25.0.1_0076b98625504c6257eada15de2ef65939c3dfdd/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/tmvien/MyData/Project/KanjiCard/KanjiCards/app/build/intermediates/exploded-aar/com.android.support/support-core-ui/25.0.1/jars/libs/internal_impl-25.0.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="e5343c9d19cb19ff55f6b268c7f3fe8c9d224f6f">
+        <dex dex="/Users/tmvien/MyData/Project/KanjiCard/KanjiCards/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-25.0.1_aa955bffc1b27363aca427b682bb82cf2a475e1a/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/tmvien/MyData/Project/KanjiCard/KanjiCards/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/25.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="772bed2d992b67b9d0327f766cc95cd63031dcd3">
+        <dex dex="/Users/tmvien/MyData/Project/KanjiCard/KanjiCards/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-animated-vector-drawable-25.0.1_5f4758c09faa6fb68024d1a99bc9dea680858129/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/tmvien/MyData/Project/KanjiCard/KanjiCards/app/build/intermediates/exploded-aar/com.android.support/support-core-utils/25.0.1/jars/libs/internal_impl-25.0.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="c5b7145fb34779b6639147b8f2f8dd77c0db771b">
+        <dex dex="/Users/tmvien/MyData/Project/KanjiCard/KanjiCards/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-25.0.1_dc7709ee4ab023b6b9365f605336b9613c29ce6f/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/tmvien/MyData/Project/KanjiCard/KanjiCards/app/build/intermediates/exploded-aar/com.android.support/support-media-compat/25.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="6a1479afe9f1b3645e1cd9a87318976893472818">
+        <dex dex="/Users/tmvien/MyData/Project/KanjiCard/KanjiCards/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-media-compat-25.0.1_55d09a45d13eab2ea078dc64957a5a60d5a594ff/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/tmvien/MyData/Project/KanjiCard/KanjiCards/app/build/intermediates/exploded-aar/com.android.support/support-core-utils/25.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="00d4c8eebf2b681073c72a26bd0849549e51c7cb">
+        <dex dex="/Users/tmvien/MyData/Project/KanjiCard/KanjiCards/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-core-utils-25.0.1_1db5a2e18a3c0e6a2267a1d48134bc24bfe89e30/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/tmvien/MyData/Project/KanjiCard/KanjiCards/app/build/intermediates/exploded-aar/com.android.support/support-core-ui/25.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="bc7e99e8d0fc279a05aa91378530f467ad62d443">
+        <dex dex="/Users/tmvien/MyData/Project/KanjiCard/KanjiCards/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-core-ui-25.0.1_486b90b3b3f7c87cd326d04776ecf50cce057682/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/tmvien/MyData/Project/KanjiCard/KanjiCards/app/build/intermediates/exploded-aar/com.android.support/support-compat/25.0.1/jars/libs/internal_impl-25.0.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="3af8cc51ef7088e56f132780da8c0bd858b6a6ad">
+        <dex dex="/Users/tmvien/MyData/Project/KanjiCard/KanjiCards/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-25.0.1_0094ad2dec97b400541469ea98921ada5fd26b67/classes.dex" />
+    </item>
+
+</items>
