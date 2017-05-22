@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
                             Log.d(TAG, "Level is null");
                             return;
                         }
-
+                        level.setId(levels.getKey());
                         levelList.add(level);
                         adapter.notifyDataSetChanged();
                     } catch (DatabaseException ex) {
@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(MainActivity.this, LessionActivity.class);
-                intent.putExtra("lession", (Serializable) levelList.get(i).getLessions());
+                intent.putExtra("level", (Serializable) levelList.get(i));
                 startActivity(intent);
             }
         });

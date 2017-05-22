@@ -14,6 +14,7 @@ public class Lessons implements Serializable{
     private int order;
     private String title;
     private List<Word> words;
+    private String id;
 
     public int getOrder() {
         return order;
@@ -37,5 +38,13 @@ public class Lessons implements Serializable{
 
     public void setWords(List<Word> wordList) {
         this.words = wordList;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

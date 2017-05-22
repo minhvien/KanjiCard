@@ -8,11 +8,19 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseException;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.noname.tmvien.kanjicards.R;
 import com.noname.tmvien.kanjicards.listview.LessonAdapter;
+import com.noname.tmvien.kanjicards.listview.LevelAdapter;
 import com.noname.tmvien.kanjicards.models.Lessons;
+import com.noname.tmvien.kanjicards.models.Levels;
 import com.noname.tmvien.kanjicards.utils.Log;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,10 +30,12 @@ import java.util.List;
 public class LessionActivity extends AppCompatActivity {
     private final static String TAG = LessionActivity.class.getSimpleName();
 
-    private List<Lessons> lessons;
+    private List<Lessons> lessonList;
     private ListView lessonListView;
     private TextView novalueTextView;
     private LessonAdapter lessonAdapter;
+    private FirebaseDatabase mFirebaseDatabase;
+    private Levels level;
 
 
     @Override
@@ -38,14 +48,30 @@ public class LessionActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         if(intent != null){
-            lessons = (List<Lessons>) intent.getSerializableExtra("lession");
+            level = (Levels) intent.getSerializableExtra("level");
         }
 
-        if(lessons != null && lessons.size() != 0){
-            lessonAdapter = new LessonAdapter(getApplicationContext(), lessons);
+        if(level != null) {
+            lessonList = new ArrayList<>();
+            lessonAdapter = new LessonAdapter(getApplicationContext(), lessonList);
             lessonListView.setAdapter(lessonAdapter);
-        } else {
-            novalueTextView.setVisibility(View.VISIBLE);
+
+            mFirebaseDatabase = FirebaseDatabase.getInstance();
+
+            mFirebaseDatabase.getReference("levels").child(level.getId()).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    lessonList.clear();
+                    Levels level = dataSnapshot.getValue(Levels.class);
+                    lessonAdapter = new LessonAdapter(getApplicationContext(), level.getLessions());
+                    lessonListView.setAdapter(lessonAdapter);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
         }
     }
 

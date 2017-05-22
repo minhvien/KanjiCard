@@ -13,6 +13,15 @@ public class Levels implements Serializable{
 
     private int jlpt;
     private List<Lessons> lessions;
+    private String id;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public List<Lessons> getLessions() {
         return lessions;
