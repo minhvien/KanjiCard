@@ -3,6 +3,7 @@ package com.noname.tmvien.kanjicards.models;
 import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by tmvien on 5/8/17.
@@ -12,6 +13,7 @@ public class Lessons implements Serializable{
 
     private int order;
     private String title;
+    private List<Word> words;
 
     public int getOrder() {
         return order;
@@ -27,5 +29,13 @@ public class Lessons implements Serializable{
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public List<Word> getWords() {
+        return words;
+    }
+
+    public void setWords(List<Word> wordList) {
+        this.words = wordList;
     }
 }
