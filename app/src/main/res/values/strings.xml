@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">KanjiCards</string>
+    <string name="level_cells_subtitle" formatted="false">%d Lessons, %d Words</string>
+    <string name="level_list_navigation_title">Levels</string>
+    <string name="lesson_list_navigation_title">Lessons</string>
 </resources>

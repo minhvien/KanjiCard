@@ -1,6 +1,10 @@
 package com.noname.tmvien.kanjicards.models;
 
+import android.content.Context;
+import android.content.res.Resources;
+
 import com.google.firebase.database.IgnoreExtraProperties;
+import com.noname.tmvien.kanjicards.R;
 
 import java.io.Serializable;
 import java.util.List;
@@ -46,5 +50,20 @@ public class Levels implements Serializable{
 //        result.put("lessions", lessions);
 //        return result;
 //    }
+
+    public String getDescriptionWithContext(Context context) {
+        String description = "";
+        int totalWords = 0;
+        int totalLesson = 0;
+        if (this.lessions != null) {
+            for (Lessons lesson : this.lessions) {
+                totalWords += lesson.getWords().size();
+            }
+            totalLesson = this.lessions.size();
+        }
+        Resources res = context.getResources();
+        description = String.format(res.getString(R.string.level_cells_subtitle), totalLesson, totalWords);
+        return description;
+    }
 }
 
