@@ -1,8 +1,11 @@
 package com.noname.tmvien.kanjicards.models;
 
+import android.text.TextUtils;
+
 import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -46,5 +49,18 @@ public class Lessons implements Serializable{
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getDescription() {
+        String description = "";
+        List<String> sampleWords = new ArrayList<>();
+        if (this.words != null) {
+            for (Word word : this.words) {
+                sampleWords.add(word.getKanji());
+            }
+        }
+
+        description = TextUtils.join(",", sampleWords);
+        return description;
     }
 }

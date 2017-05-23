@@ -5,11 +5,14 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Text"
+        android:text="@string/lesson_list_non_value"
+        android:textAlignment="center"
         android:id="@+id/novalueTextView"
         android:visibility="gone"/>
-    <ListView
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/lessonListRecycler"
+        android:scrollbars="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/lession_list"/>
+        android:layout_height="match_parent"/>
 </LinearLayout>

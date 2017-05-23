@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         levelList = new ArrayList<>();
 
-        recyclerView = (RecyclerView) findViewById(R.id.list_level);
+        recyclerView = (RecyclerView) findViewById(R.id.levelListRecyler);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(this,

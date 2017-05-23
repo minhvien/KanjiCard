@@ -4,21 +4,21 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.noname.tmvien.kanjicards.R;
+import com.noname.tmvien.kanjicards.listview.ItemClickListener;
 import com.noname.tmvien.kanjicards.listview.LessonAdapter;
-import com.noname.tmvien.kanjicards.listview.LevelAdapter;
+import com.noname.tmvien.kanjicards.listview.RecyclerTouchListener;
 import com.noname.tmvien.kanjicards.models.Lessons;
 import com.noname.tmvien.kanjicards.models.Levels;
-import com.noname.tmvien.kanjicards.utils.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,9 +31,12 @@ public class LessionActivity extends AppCompatActivity {
     private final static String TAG = LessionActivity.class.getSimpleName();
 
     private List<Lessons> lessonList;
-    private ListView lessonListView;
+
     private TextView novalueTextView;
-    private LessonAdapter lessonAdapter;
+
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter recyclerAdapter;
+
     private FirebaseDatabase mFirebaseDatabase;
     private Levels level;
 
@@ -43,7 +46,21 @@ public class LessionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.lession_activity);
 
-        lessonListView = (ListView) findViewById(R.id.lession_list);
+        recyclerView = (RecyclerView) findViewById(R.id.lessonListRecycler);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(this,
+                recyclerView, new ItemClickListener() {
+            @Override
+            public void onClick(View view, final int position) {
+
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+
+            }
+        }));
         novalueTextView = (TextView) findViewById(R.id.novalueTextView);
 
         Intent intent = getIntent();
@@ -51,10 +68,10 @@ public class LessionActivity extends AppCompatActivity {
             level = (Levels) intent.getSerializableExtra("level");
         }
 
-        if(level != null) {
+        if(level != null && level.getLessions() != null && level.getLessions().size() > 0) {
             lessonList = new ArrayList<>();
-            lessonAdapter = new LessonAdapter(getApplicationContext(), lessonList);
-            lessonListView.setAdapter(lessonAdapter);
+            recyclerAdapter = new LessonAdapter(getApplicationContext(), lessonList);
+            recyclerView.setAdapter(recyclerAdapter);
 
             mFirebaseDatabase = FirebaseDatabase.getInstance();
 
@@ -63,8 +80,8 @@ public class LessionActivity extends AppCompatActivity {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     lessonList.clear();
                     Levels level = dataSnapshot.getValue(Levels.class);
-                    lessonAdapter = new LessonAdapter(getApplicationContext(), level.getLessions());
-                    lessonListView.setAdapter(lessonAdapter);
+                    recyclerAdapter = new LessonAdapter(getApplicationContext(), level.getLessions());
+                    recyclerView.setAdapter(recyclerAdapter);
                 }
 
                 @Override
@@ -72,7 +89,10 @@ public class LessionActivity extends AppCompatActivity {
 
                 }
             });
+        } else {
+            novalueTextView.setVisibility(View.VISIBLE);
         }
+        setTitle(getString(R.string.lesson_list_navigation_title));
     }
 
 }
