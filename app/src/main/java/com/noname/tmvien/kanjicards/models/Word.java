@@ -21,7 +21,7 @@ public class Word implements Serializable {
     private List<String> mean;
     private List<String> on;
     private int order;
-    private String sortMean;
+    private String shortMean;
     private String strokes;
     private String hiragana;
 
@@ -105,12 +105,12 @@ public class Word implements Serializable {
         this.order = order;
     }
 
-    public String getSortMean() {
-        return sortMean;
+    public String getShortMean() {
+        return shortMean;
     }
 
-    public void setSortMean(String sortMean) {
-        this.sortMean = sortMean;
+    public void setShortMean(String shortMean) {
+        this.shortMean = shortMean;
     }
 
     public String getStrokes() {

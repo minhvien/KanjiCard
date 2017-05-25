@@ -21,6 +21,7 @@ import com.noname.tmvien.kanjicards.listview.RecyclerTouchListener;
 import com.noname.tmvien.kanjicards.models.Lessons;
 import com.noname.tmvien.kanjicards.models.Levels;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,6 +60,7 @@ public class LessionActivity extends AppCompatActivity {
                 Intent intent = new Intent(LessionActivity.this, WordListActivity.class);
                 intent.putExtra("idLevel", level.getId());
                 intent.putExtra("idLesson", lessonList.get(position).getId());
+                intent.putExtra("Lesson",  (Serializable) lessonList.get(position));
                 startActivity(intent);
             }
 
@@ -108,6 +110,14 @@ public class LessionActivity extends AppCompatActivity {
                 novalueTextView.setVisibility(View.VISIBLE);
             }
         }
-        setTitle(getString(R.string.lesson_list_navigation_title));
+        setScreenTitle();
+    }
+
+    private void setScreenTitle() {
+        if (level != null) {
+            setTitle("Level " + level.getJlpt());
+        } else {
+            setTitle(R.string.lesson_list_navigation_title);
+        }
     }
 }
