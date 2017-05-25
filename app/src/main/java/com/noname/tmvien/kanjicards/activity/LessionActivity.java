@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -15,10 +17,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.noname.tmvien.kanjicards.R;
 import com.noname.tmvien.kanjicards.listview.LessonAdapter;
-import com.noname.tmvien.kanjicards.listview.LevelAdapter;
 import com.noname.tmvien.kanjicards.models.Lessons;
 import com.noname.tmvien.kanjicards.models.Levels;
-import com.noname.tmvien.kanjicards.utils.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,32 +47,54 @@ public class LessionActivity extends AppCompatActivity {
         novalueTextView = (TextView) findViewById(R.id.novalueTextView);
 
         Intent intent = getIntent();
-        if(intent != null){
+        if (intent != null) {
             level = (Levels) intent.getSerializableExtra("level");
         }
 
-        if(level != null) {
+        if (level != null) {
             lessonList = new ArrayList<>();
             lessonAdapter = new LessonAdapter(getApplicationContext(), lessonList);
             lessonListView.setAdapter(lessonAdapter);
 
             mFirebaseDatabase = FirebaseDatabase.getInstance();
 
-            mFirebaseDatabase.getReference("levels").child(level.getId()).addValueEventListener(new ValueEventListener() {
+            mFirebaseDatabase.getReference("levels").child(level.getId()).child("lessions").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     lessonList.clear();
-                    Levels level = dataSnapshot.getValue(Levels.class);
-                    lessonAdapter = new LessonAdapter(getApplicationContext(), level.getLessions());
-                    lessonListView.setAdapter(lessonAdapter);
+                    for (DataSnapshot item : dataSnapshot.getChildren()) {
+                        try {
+                            Lessons lesson = item.getValue(Lessons.class);
+                            if (lesson == null) {
+                                Log.d(TAG, "Level is null");
+                                return;
+                            }
+                            lesson.setId(item.getKey());
+                            lessonList.add(lesson);
+                            level.setLessions(lessonList);
+                            lessonAdapter.notifyDataSetChanged();
+                        } catch (DatabaseException ex) {
+                            Log.e(TAG, "error: " + ex.getMessage());
+                        }
+                    }
                 }
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-
+                    novalueTextView.setVisibility(View.VISIBLE);
                 }
             });
         }
+
+        lessonListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(LessionActivity.this, WordListActivity.class);
+                intent.putExtra("idLevel",  level.getId());
+                intent.putExtra("idLesson", lessonList.get(i).getId());
+                startActivity(intent);
+            }
+        });
     }
 
 }

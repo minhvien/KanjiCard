@@ -1,5 +1,10 @@
 package com.noname.tmvien.kanjicards.models;
 
+import com.google.android.gms.internal.zzbmj;
+import com.google.android.gms.internal.zzbml;
+import com.google.android.gms.internal.zzboz;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.io.Serializable;
@@ -9,7 +14,7 @@ import java.util.List;
  * Created by tmvien on 4/25/17.
  */
 @IgnoreExtraProperties
-public class Levels implements Serializable{
+public class Levels implements Serializable {
 
     private int jlpt;
     private List<Lessons> lessions;
@@ -39,12 +44,6 @@ public class Levels implements Serializable{
         this.jlpt = jlpt;
     }
 
-//    @Exclude
-//    public Map<String, Object> toMap(){
-//        HashMap<String, Object> result = new HashMap<>();
-//        result.put("jlpt", jlpt);
-//        result.put("lessions", lessions);
-//        return result;
-//    }
+
 }
 

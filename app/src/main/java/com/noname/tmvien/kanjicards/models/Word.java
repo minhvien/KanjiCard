@@ -1,5 +1,8 @@
 package com.noname.tmvien.kanjicards.models;
 
+import com.google.android.gms.internal.zzboz;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.io.Serializable;
@@ -11,6 +14,7 @@ import java.util.List;
 @IgnoreExtraProperties
 public class Word implements Serializable {
 
+    private String id;
     private String components;
     private List<Word> example;
     private String han;
@@ -23,6 +27,14 @@ public class Word implements Serializable {
     private String sortMean;
     private String strokes;
     private String hiragana;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getComponents() {
         return components;

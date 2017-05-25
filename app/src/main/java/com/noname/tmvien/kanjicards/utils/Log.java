@@ -30,9 +30,9 @@ public class Log {
                 logFileHandler = new FileHandler(target.getAbsolutePath(), 1024 * 1024, 10, true);
                 logFileHandler.setFormatter(new KanjiCardsLogFileFormatter());
                 logFileHandler.publish( new LogRecord(Level.ALL, "file logger initialized:" + target.getAbsolutePath()));
-                Log.i("ProgOffice_LOGGER", "file logger initialized:" + target.getAbsolutePath());
+                Log.i("KanjiCard_LOGGER", "file logger initialized:" + target.getAbsolutePath());
             } catch (Exception e) {
-                Log.e("ProgOffice_LOGGER", "file logger initialize failed", e);
+                Log.e("KanjiCard_LOGGER", "file logger initialize failed", e);
             }
         }
     }
