@@ -4,10 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -16,7 +15,9 @@ import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.noname.tmvien.kanjicards.R;
+import com.noname.tmvien.kanjicards.listview.ItemClickListener;
 import com.noname.tmvien.kanjicards.listview.LessonAdapter;
+import com.noname.tmvien.kanjicards.listview.RecyclerTouchListener;
 import com.noname.tmvien.kanjicards.models.Lessons;
 import com.noname.tmvien.kanjicards.models.Levels;
 
@@ -31,9 +32,12 @@ public class LessionActivity extends AppCompatActivity {
     private final static String TAG = LessionActivity.class.getSimpleName();
 
     private List<Lessons> lessonList;
-    private ListView lessonListView;
+
     private TextView novalueTextView;
-    private LessonAdapter lessonAdapter;
+
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter recyclerAdapter;
+
     private FirebaseDatabase mFirebaseDatabase;
     private Levels level;
 
@@ -43,58 +47,67 @@ public class LessionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.lession_activity);
 
-        lessonListView = (ListView) findViewById(R.id.lession_list);
+        recyclerView = (RecyclerView) findViewById(R.id.lessonListRecycler);
         novalueTextView = (TextView) findViewById(R.id.novalueTextView);
+
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(this,
+                recyclerView, new ItemClickListener() {
+            @Override
+            public void onClick(View view, final int position) {
+                Intent intent = new Intent(LessionActivity.this, WordListActivity.class);
+                intent.putExtra("idLevel", level.getId());
+                intent.putExtra("idLesson", lessonList.get(position).getId());
+                startActivity(intent);
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+
+            }
+        }));
 
         Intent intent = getIntent();
         if (intent != null) {
             level = (Levels) intent.getSerializableExtra("level");
-        }
 
-        if (level != null) {
-            lessonList = new ArrayList<>();
-            lessonAdapter = new LessonAdapter(getApplicationContext(), lessonList);
-            lessonListView.setAdapter(lessonAdapter);
+            if (level != null && level.getLessions() != null && level.getLessions().size() > 0) {
+                lessonList = new ArrayList<>();
+                recyclerAdapter = new LessonAdapter(getApplicationContext(), lessonList);
+                recyclerView.setAdapter(recyclerAdapter);
 
-            mFirebaseDatabase = FirebaseDatabase.getInstance();
+                mFirebaseDatabase = FirebaseDatabase.getInstance();
 
-            mFirebaseDatabase.getReference("levels").child(level.getId()).child("lessions").addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    lessonList.clear();
-                    for (DataSnapshot item : dataSnapshot.getChildren()) {
-                        try {
-                            Lessons lesson = item.getValue(Lessons.class);
-                            if (lesson == null) {
-                                Log.d(TAG, "Level is null");
-                                return;
+                mFirebaseDatabase.getReference("levels").child(level.getId()).child("lessions").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        lessonList.clear();
+                        for (DataSnapshot item : dataSnapshot.getChildren()) {
+                            try {
+                                Lessons lesson = item.getValue(Lessons.class);
+                                if (lesson == null) {
+                                    return;
+                                }
+                                lesson.setId(item.getKey());
+                                lessonList.add(lesson);
+                                level.setLessions(lessonList);
+                                recyclerAdapter.notifyDataSetChanged();
+                            } catch (DatabaseException ex) {
                             }
-                            lesson.setId(item.getKey());
-                            lessonList.add(lesson);
-                            level.setLessions(lessonList);
-                            lessonAdapter.notifyDataSetChanged();
-                        } catch (DatabaseException ex) {
-                            Log.e(TAG, "error: " + ex.getMessage());
                         }
                     }
-                }
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    novalueTextView.setVisibility(View.VISIBLE);
-                }
-            });
-        }
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        novalueTextView.setVisibility(View.VISIBLE);
+                    }
+                });
 
-        lessonListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(LessionActivity.this, WordListActivity.class);
-                intent.putExtra("idLevel",  level.getId());
-                intent.putExtra("idLesson", lessonList.get(i).getId());
-                startActivity(intent);
+            } else {
+                novalueTextView.setVisibility(View.VISIBLE);
             }
-        });
+        }
+        setTitle(getString(R.string.lesson_list_navigation_title));
     }
-
 }

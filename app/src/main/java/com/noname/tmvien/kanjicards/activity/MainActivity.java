@@ -3,10 +3,10 @@ package com.noname.tmvien.kanjicards.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -15,7 +15,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.noname.tmvien.kanjicards.R;
+import com.noname.tmvien.kanjicards.listview.ItemClickListener;
 import com.noname.tmvien.kanjicards.listview.LevelAdapter;
+import com.noname.tmvien.kanjicards.listview.RecyclerTouchListener;
 import com.noname.tmvien.kanjicards.models.Levels;
 
 import java.io.Serializable;
@@ -25,20 +27,40 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
+    private DatabaseReference mDatabase;
+    private DatabaseReference mDatabaseReference;
     private FirebaseDatabase mFirebaseDatabase;
 
-    private ListView listLevel;
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter recyclerAdapter;
+
+    private ArrayList<Levels> levelList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        levelList = new ArrayList<>();
 
-        listLevel = (ListView) findViewById(R.id.list_level);
+        recyclerView = (RecyclerView) findViewById(R.id.levelListRecyler);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(this,
+                recyclerView, new ItemClickListener() {
+            @Override
+            public void onClick(View view, final int position) {
+                Intent intent = new Intent(MainActivity.this, LessionActivity.class);
+                intent.putExtra("level", (Serializable) levelList.get(position));
+                startActivity(intent);
+            }
 
-        final ArrayList<Levels> levelList = new ArrayList<>();
-        final LevelAdapter adapter = new LevelAdapter(getApplicationContext(), levelList);
-        listLevel.setAdapter(adapter);
+            @Override
+            public void onLongClick(View view, int position) {
+
+            }
+        }));
+        recyclerAdapter = new LevelAdapter(getApplicationContext(), levelList);
+        recyclerView.setAdapter(recyclerAdapter);
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
 
@@ -57,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                         level.setId(levels.getKey());
                         levelList.add(level);
-                        adapter.notifyDataSetChanged();
+                        recyclerAdapter.notifyDataSetChanged();
                     } catch (DatabaseException ex) {
                         Log.e(TAG, "error: " + ex.getMessage());
                     }
@@ -70,13 +92,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        listLevel.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(MainActivity.this, LessionActivity.class);
-                intent.putExtra("level", (Serializable) levelList.get(i));
-                startActivity(intent);
-            }
-        });
+        setTitle(getString(R.string.level_list_navigation_title));
+
     }
 }

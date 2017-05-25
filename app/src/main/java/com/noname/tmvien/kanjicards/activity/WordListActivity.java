@@ -13,9 +13,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.noname.tmvien.kanjicards.R;
 import com.noname.tmvien.kanjicards.listview.LessonAdapter;
-import com.noname.tmvien.kanjicards.listview.LevelAdapter;
-import com.noname.tmvien.kanjicards.models.Lessons;
-import com.noname.tmvien.kanjicards.models.Levels;
 import com.noname.tmvien.kanjicards.models.Word;
 
 import java.util.ArrayList;

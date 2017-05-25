@@ -1,8 +1,5 @@
 package com.noname.tmvien.kanjicards.models;
 
-import com.google.android.gms.internal.zzboz;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.io.Serializable;
@@ -124,11 +121,11 @@ public class Word implements Serializable {
         this.strokes = strokes;
     }
 
-    public String getHiragana(){
+    public String getHiragana() {
         return hiragana;
     }
 
-    public void setHiragana(String hiragana){
+    public void setHiragana(String hiragana) {
         this.hiragana = hiragana;
     }
 }
