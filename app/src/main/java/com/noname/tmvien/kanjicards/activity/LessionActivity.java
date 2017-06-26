@@ -74,14 +74,14 @@ public class LessionActivity extends AppCompatActivity {
         if (intent != null) {
             level = (Levels) intent.getSerializableExtra("level");
 
-            if (level != null && level.getLessions() != null && level.getLessions().size() > 0) {
+            if (level != null && level.getLessons() != null && level.getLessons().size() > 0) {
                 lessonList = new ArrayList<>();
                 recyclerAdapter = new LessonAdapter(getApplicationContext(), lessonList);
                 recyclerView.setAdapter(recyclerAdapter);
 
                 mFirebaseDatabase = FirebaseDatabase.getInstance();
 
-                mFirebaseDatabase.getReference("levels").child(level.getId()).child("lessions").addValueEventListener(new ValueEventListener() {
+                mFirebaseDatabase.getReference("levels").child(level.getId()).child("lessons").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         lessonList.clear();
@@ -93,7 +93,7 @@ public class LessionActivity extends AppCompatActivity {
                                 }
                                 lesson.setId(item.getKey());
                                 lessonList.add(lesson);
-                                level.setLessions(lessonList);
+                                level.setLessons(lessonList);
                                 recyclerAdapter.notifyDataSetChanged();
                             } catch (DatabaseException ex) {
                             }

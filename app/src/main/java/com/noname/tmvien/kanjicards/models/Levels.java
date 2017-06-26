@@ -1,10 +1,6 @@
 package com.noname.tmvien.kanjicards.models;
 
-import android.content.Context;
-import android.content.res.Resources;
-
 import com.google.firebase.database.IgnoreExtraProperties;
-import com.noname.tmvien.kanjicards.R;
 
 import java.io.Serializable;
 import java.util.List;
@@ -16,7 +12,7 @@ import java.util.List;
 public class Levels implements Serializable{
 
     private int jlpt;
-    private List<Lessons> lessions;
+    private List<Lessons> lessons;
     private String id;
 
     public String getId() {
@@ -27,12 +23,12 @@ public class Levels implements Serializable{
         this.id = id;
     }
 
-    public List<Lessons> getLessions() {
-        return lessions;
+    public List<Lessons> getLessons() {
+        return lessons;
     }
 
-    public void setLessions(List<Lessons> lessions) {
-        this.lessions = lessions;
+    public void setLessons(List<Lessons> lessons) {
+        this.lessons = lessons;
     }
 
     public int getJlpt() {

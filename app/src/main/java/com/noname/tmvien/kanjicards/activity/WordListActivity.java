@@ -78,7 +78,7 @@ public class WordListActivity extends AppCompatActivity {
                 words = new ArrayList<>();
                 recyclerAdapter = new WordListAdapter(getApplicationContext(), words);
                 recyclerView.setAdapter(recyclerAdapter);
-                mFirebaseDatabase.getReference("levels").child(idLevel).child("lessions").child(idLesson).child("words").addValueEventListener(new ValueEventListener() {
+                mFirebaseDatabase.getReference("levels").child(idLevel).child("lessons").child(idLesson).child("words").addValueEventListener(new ValueEventListener() {
 
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {

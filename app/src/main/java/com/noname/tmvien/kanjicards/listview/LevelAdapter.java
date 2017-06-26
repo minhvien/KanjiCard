@@ -54,11 +54,11 @@ public class LevelAdapter extends RecyclerView.Adapter<LevelSelectorViewHolder> 
         String description = "";
         int totalWords = 0;
         int totalLesson = 0;
-        if (level != null && level.getLessions() != null) {
-            for (Lessons lesson : level.getLessions()) {
+        if (level != null && level.getLessons() != null) {
+            for (Lessons lesson : level.getLessons()) {
                 totalWords += lesson.getWords().size();
             }
-            totalLesson = level.getLessions().size();
+            totalLesson = level.getLessons().size();
         }
         Resources res = context.getResources();
         description = String.format(res.getString(R.string.level_cells_subtitle), totalLesson, totalWords);
