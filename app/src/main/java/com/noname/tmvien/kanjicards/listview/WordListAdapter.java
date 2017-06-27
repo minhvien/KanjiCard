@@ -31,7 +31,7 @@ public class WordListAdapter extends RecyclerView.Adapter<LessonSelectorViewHold
     public LessonSelectorViewHolder onCreateViewHolder(ViewGroup parent,
                                                        int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.lesson_item, null);
-        LessonSelectorViewHolder viewHolder = new LessonSelectorViewHolder(view);
+        LessonSelectorViewHolder viewHolder = new LessonSelectorViewHolder(view, context);
         return viewHolder;
     }
 

@@ -31,7 +31,7 @@ public class LevelAdapter extends RecyclerView.Adapter<LevelSelectorViewHolder> 
     public LevelSelectorViewHolder onCreateViewHolder(ViewGroup parent,
                                                       int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.level_item, null);
-        LevelSelectorViewHolder viewHolder = new LevelSelectorViewHolder(view);
+        LevelSelectorViewHolder viewHolder = new LevelSelectorViewHolder(view, context);
         return viewHolder;
     }
 
