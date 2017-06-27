@@ -3,7 +3,7 @@ package com.noname.tmvien.kanjicards.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -44,14 +44,16 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerView = (RecyclerView) findViewById(R.id.levelListRecyler);
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(this,
                 recyclerView, new ItemClickListener() {
             @Override
             public void onClick(View view, final int position) {
-                Intent intent = new Intent(MainActivity.this, LessionActivity.class);
-                intent.putExtra("level", (Serializable) levelList.get(position));
-                startActivity(intent);
+                if (position < levelList.size()) {
+                    Intent intent = new Intent(MainActivity.this, LessionActivity.class);
+                    intent.putExtra("level", (Serializable) levelList.get(position));
+                    startActivity(intent);
+                }
             }
 
             @Override
