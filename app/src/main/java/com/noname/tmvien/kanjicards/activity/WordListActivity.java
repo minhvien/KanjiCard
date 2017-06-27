@@ -21,6 +21,7 @@ import com.noname.tmvien.kanjicards.listview.WordListAdapter;
 import com.noname.tmvien.kanjicards.models.Lessons;
 import com.noname.tmvien.kanjicards.models.Word;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,7 +59,9 @@ public class WordListActivity extends AppCompatActivity {
                 recyclerView, new ItemClickListener() {
             @Override
             public void onClick(View view, final int position) {
-
+                Intent intent = new Intent(WordListActivity.this, DetailWordActivity.class);
+                intent.putExtra("Word",  (Serializable) words.get(position));
+                startActivity(intent);
             }
 
             @Override
