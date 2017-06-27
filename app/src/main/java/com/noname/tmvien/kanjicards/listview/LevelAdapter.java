@@ -1,14 +1,12 @@
 package com.noname.tmvien.kanjicards.listview;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.noname.tmvien.kanjicards.R;
-import com.noname.tmvien.kanjicards.models.Lessons;
 import com.noname.tmvien.kanjicards.models.Levels;
 
 import java.util.List;
@@ -39,30 +37,19 @@ public class LevelAdapter extends RecyclerView.Adapter<LevelSelectorViewHolder> 
 
     @Override
     public void onBindViewHolder(LevelSelectorViewHolder holder, int position) {
+        if (position < levels.size()) {
         Levels level = (Levels) this.levels.get(position);
-        holder.title.setText("Level " + level.getJlpt());
-        holder.subtitle.setText(getDescriptionLevel(level));
+            holder.title.setText("N  " + level.getJlpt());
+        } else {
+            holder.title.setText("");
+        }
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return levels.size();
+        return levels.size() + (levels.size() % 2);
     }
 
-    private String getDescriptionLevel(Levels level) {
-        String description = "";
-        int totalWords = 0;
-        int totalLesson = 0;
-        if (level != null && level.getLessons() != null) {
-            for (Lessons lesson : level.getLessons()) {
-                totalWords += lesson.getWords().size();
-            }
-            totalLesson = level.getLessons().size();
-        }
-        Resources res = context.getResources();
-        description = String.format(res.getString(R.string.level_cells_subtitle), totalLesson, totalWords);
-        return description;
-    }
 }
 
