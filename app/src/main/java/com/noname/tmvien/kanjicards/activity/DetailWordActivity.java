@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.noname.tmvien.kanjicards.R;
@@ -16,7 +15,6 @@ import com.noname.tmvien.kanjicards.listview.RecyclerTouchListener;
 import com.noname.tmvien.kanjicards.listview.WordListAdapter;
 import com.noname.tmvien.kanjicards.models.Word;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -73,6 +71,9 @@ public class DetailWordActivity extends AppCompatActivity {
         }));
         recyclerAdapter = new WordListAdapter(getApplicationContext(), word.getExample());
         recyclerView.setAdapter(recyclerAdapter);
+
+        // Tempatory hide untill apply card
+        recyclerView.setVisibility(View.GONE);
 
     }
 

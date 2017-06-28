@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
@@ -54,14 +54,16 @@ public class WordListActivity extends AppCompatActivity {
 
 
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(this,
                 recyclerView, new ItemClickListener() {
             @Override
             public void onClick(View view, final int position) {
-                Intent intent = new Intent(WordListActivity.this, DetailWordActivity.class);
-                intent.putExtra("Word",  (Serializable) words.get(position));
-                startActivity(intent);
+                if (position < words.size()) {
+                    Intent intent = new Intent(WordListActivity.this, DetailWordActivity.class);
+                    intent.putExtra("Word", (Serializable) words.get(position));
+                    startActivity(intent);
+                }
             }
 
             @Override
