@@ -39,7 +39,7 @@ public class LevelAdapter extends RecyclerView.Adapter<LevelSelectorViewHolder> 
     public void onBindViewHolder(LevelSelectorViewHolder holder, int position) {
         if (position < levels.size()) {
         Levels level = (Levels) this.levels.get(position);
-            holder.title.setText("N " + level.getJlpt());
+            holder.title.setText("N" + level.getJlpt());
         } else {
             holder.title.setText("");
         }
