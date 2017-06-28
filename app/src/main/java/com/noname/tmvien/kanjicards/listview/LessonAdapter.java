@@ -33,7 +33,7 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonSelectorViewHolder
     @Override
     public LessonSelectorViewHolder onCreateViewHolder(ViewGroup parent,
                                                        int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.lesson_item, null);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.lesson_item, parent, false);
         LessonSelectorViewHolder viewHolder = new LessonSelectorViewHolder(view, context);
         return viewHolder;
     }
@@ -42,7 +42,18 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonSelectorViewHolder
     public void onBindViewHolder(LessonSelectorViewHolder holder, int position) {
         Lessons lesson = (Lessons) this.lessonsList.get(position);
         holder.title.setText(lesson.getTitle());
-        holder.subtitle.setText(getDescription(lesson));
+        List<String> description = getDescription(lesson);
+        String subTitle1 = TextUtils.join(",", description);
+        String subTitle2 = "";
+        int splitPoint = 5;
+        if (description.size() > splitPoint) {
+            List<String> description1 = description.subList(0, splitPoint);
+            List<String> description2 = description.subList(splitPoint, description.size());
+            subTitle1 = TextUtils.join(",", description1);
+            subTitle2 = TextUtils.join(",", description2);
+        }
+        holder.subtitle1.setText(subTitle1);
+        holder.subtitle2.setText(subTitle2);
     }
 
     // Return the size of your dataset (invoked by the layout manager)
@@ -51,7 +62,7 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonSelectorViewHolder
         return lessonsList.size();
     }
 
-    private String getDescription(Lessons lesson) {
+    private List<String> getDescription(Lessons lesson) {
         String description = "";
         List<String> sampleWords = new ArrayList<>();
         if (lesson.getWords() != null) {
@@ -59,8 +70,6 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonSelectorViewHolder
                 sampleWords.add(word.getKanji());
             }
         }
-
-        description = TextUtils.join(",", sampleWords);
-        return description;
+        return sampleWords;
     }
 }

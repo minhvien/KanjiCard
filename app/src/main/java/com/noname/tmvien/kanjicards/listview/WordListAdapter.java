@@ -39,7 +39,7 @@ public class WordListAdapter extends RecyclerView.Adapter<LessonSelectorViewHold
     public void onBindViewHolder(LessonSelectorViewHolder holder, int position) {
         Word word = (Word) this.wordList.get(position);
         holder.title.setText(word.getKanji());
-        holder.subtitle.setText(word.getShortMean());
+        holder.subtitle1.setText(word.getShortMean());
     }
 
     // Return the size of your dataset (invoked by the layout manager)

@@ -13,14 +13,17 @@ import com.noname.tmvien.kanjicards.R;
  */
 public class LessonSelectorViewHolder extends RecyclerView.ViewHolder {
     TextView title;
-    TextView subtitle;
+    TextView subtitle1;
+    TextView subtitle2;
 
     public LessonSelectorViewHolder(View view, Context context) {
         super(view);
         this.title = (TextView) view.findViewById(R.id.title);
-        this.subtitle = (TextView) view.findViewById(R.id.subtitle);
+        this.subtitle1 = (TextView) view.findViewById(R.id.subtitle1);
+        this.subtitle2 = (TextView) view.findViewById(R.id.subtitle2);
         Typeface custom_font = Typeface.createFromAsset(context.getAssets(),  "fonts/honoka-antique-maru.ttf");
         this.title.setTypeface(custom_font);
-        this.subtitle.setTypeface(custom_font);
+        this.subtitle1.setTypeface(custom_font);
+        this.subtitle2.setTypeface(custom_font);
     }
 }
