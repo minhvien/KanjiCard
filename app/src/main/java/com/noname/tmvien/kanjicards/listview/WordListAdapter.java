@@ -15,7 +15,7 @@ import java.util.List;
  * Created by nhkha on 5/25/17.
  */
 
-public class WordListAdapter extends RecyclerView.Adapter<LessonSelectorViewHolder> {
+public class WordListAdapter extends RecyclerView.Adapter<WordSelectorViewHolder> {
     private final static String TAG = LessonAdapter.class.getSimpleName();
 
     private Context context;
@@ -28,23 +28,27 @@ public class WordListAdapter extends RecyclerView.Adapter<LessonSelectorViewHold
     }
 
     @Override
-    public LessonSelectorViewHolder onCreateViewHolder(ViewGroup parent,
+    public WordSelectorViewHolder onCreateViewHolder(ViewGroup parent,
                                                        int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.lesson_item, null);
-        LessonSelectorViewHolder viewHolder = new LessonSelectorViewHolder(view, context);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.word_item, parent, false);
+        WordSelectorViewHolder viewHolder = new WordSelectorViewHolder(view, context);
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(LessonSelectorViewHolder holder, int position) {
-        Word word = (Word) this.wordList.get(position);
-        holder.title.setText(word.getKanji());
-        holder.subtitle1.setText(word.getShortMean());
+    public void onBindViewHolder(WordSelectorViewHolder holder, int position) {
+        if (position < wordList.size()) {
+            Word word = (Word) wordList.get(position);
+            holder.title.setText(word.getKanji());
+        } else {
+            holder.title.setText("");
+        }
+
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return wordList.size();
+        return wordList.size() + (3 - (wordList.size() % 3));
     }
 }

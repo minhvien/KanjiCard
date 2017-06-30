@@ -3,4 +3,55 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+
+    <!-- Apple-crayon Color -->
+    <color name="cantaloupe">#ffce6e</color>
+    <color name="honeydew">#cefa6e</color>
+    <color name="spindrift">#68fbd0</color>
+    <color name="sky">#6acfff</color>
+    <color name="lavender">#d278ff</color>
+    <color name="carnation">#ff7fd3</color>
+    <color name="licorice">#000000</color>
+    <color name="snow">#ffffff</color>
+    <color name="salmon">#ff726e</color>
+    <color name="banana">#fffb6d</color>
+    <color name="flora">#68f96e</color>
+    <color name="ice">#68fdff</color>
+    <color name="orchid">#6e76ff</color>
+    <color name="bubblegum">#ff7aff</color>
+    <color name="lead">#1e1e1e</color>
+    <color name="mercury">#e8e8e8</color>
+    <color name="tangerine">#ff8802</color>
+    <color name="lime">#83f902</color>
+    <color name="seaFoam">#03f987</color>
+    <color name="aqua">#008cff</color>
+    <color name="grape">#8931ff</color>
+    <color name="strawberry">#ff2987</color>
+    <color name="tungsten">#3a3a3a</color>
+    <color name="silver">#d0d0d0</color>
+    <color name="maraschino">#ff211f</color>
+    <color name="lemon">#fffa03</color>
+    <color name="spring">#05f802</color>
+    <color name="turquoise">#00fdff</color>
+    <color name="blueberry">#002eff</color>
+    <color name="magenta">#ff39ff</color>
+    <color name="iron">#545453</color>
+    <color name="magnesium">#b8b8b8</color>
+    <color name="mocha">#894800</color>
+    <color name="fern">#458401</color>
+    <color name="moss">#018448</color>
+    <color name="ocean">#004a88</color>
+    <color name="eggplant">#491a88</color>
+    <color name="maroon">#891648</color>
+    <color name="steel">#6e6e6e</color>
+    <color name="aluminum">#a09fa0</color>
+    <color name="cayenne">#891100</color>
+    <color name="aspargus">#888501</color>
+    <color name="clover">#028401</color>
+    <color name="teal">#008688</color>
+    <color name="midnight">#001888</color>
+    <color name="plum">#891e88</color>
+    <color name="tin">#878687</color>
+    <color name="nickel">#888787</color>
 </resources>

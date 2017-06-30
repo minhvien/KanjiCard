@@ -1,12 +1,16 @@
 package com.noname.tmvien.kanjicards.activity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -48,20 +52,30 @@ public class WordListActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        ActionBar bar = getSupportActionBar();
+        bar.setBackgroundDrawable(this.getResources().getDrawable(R.color.fern));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.setStatusBarColor(this.getResources().getColor(R.color.fern));
+        }
         setContentView(R.layout.word_activity);
         recyclerView = (RecyclerView) findViewById(R.id.wordListRecycler);
         novalueTextView = (TextView) findViewById(R.id.novalueTextView);
 
 
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(this,
                 recyclerView, new ItemClickListener() {
             @Override
             public void onClick(View view, final int position) {
-                Intent intent = new Intent(WordListActivity.this, DetailWordActivity.class);
-                intent.putExtra("Word",  (Serializable) words.get(position));
-                startActivity(intent);
+                if (position < words.size()) {
+                    Intent intent = new Intent(WordListActivity.this, DetailWordActivity.class);
+                    intent.putExtra("Word", (Serializable) words.get(position));
+                    startActivity(intent);
+                }
             }
 
             @Override

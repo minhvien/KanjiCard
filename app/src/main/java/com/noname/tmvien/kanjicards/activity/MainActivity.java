@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements ViewAnimator.View
             @Override
             public void onClick(View v) {
                 drawerLayout.closeDrawers();
-            }
+                }
         });
 
         setActionBar();
@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements ViewAnimator.View
             }
         };
         drawerLayout.setDrawerListener(drawerToggle);
-    }
+            }
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements ViewAnimator.View
         drawerToggle.syncState();
     }
 
-    @Override
+            @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         drawerToggle.onConfigurationChanged(newConfig);
@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements ViewAnimator.View
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
+                        }
 
     private ScreenShotable replaceFragment(ScreenShotable screenShotable, int position) {
         View contentFrame = findViewById(R.id.content_frame);
@@ -155,7 +155,7 @@ public class MainActivity extends AppCompatActivity implements ViewAnimator.View
         findViewById(R.id.content_overlay).setBackground(new BitmapDrawable(getResources(), screenShotable.getBitmap()));
         animator.start();
         return screenShotable;
-    }
+                    }
 
     @Override
     public ScreenShotable onSwitch(Resourceble slideMenuItem, ScreenShotable screenShotable, int position) {
@@ -174,14 +174,14 @@ public class MainActivity extends AppCompatActivity implements ViewAnimator.View
                 return replaceFragment(kanjiFragment, position);
             default:
                 return replaceFragment(screenShotable, position);
-        }
-    }
+                }
+            }
 
-    @Override
+            @Override
     public void disableHomeButton() {
         getSupportActionBar().setHomeButtonEnabled(false);
 
-    }
+            }
 
     @Override
     public void enableHomeButton() {
