@@ -2,12 +2,12 @@ package com.noname.tmvien.kanjicards.fragment;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +23,7 @@ import com.noname.tmvien.kanjicards.listview.ItemClickListener;
 import com.noname.tmvien.kanjicards.listview.LevelAdapter;
 import com.noname.tmvien.kanjicards.listview.RecyclerTouchListener;
 import com.noname.tmvien.kanjicards.models.Levels;
+import com.noname.tmvien.kanjicards.utils.Log;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -39,9 +40,12 @@ public class LevelsFragment extends Fragment implements ScreenShotable{
     private FirebaseDatabase mFirebaseDatabase;
 
     private RecyclerView recyclerView;
+    private View containerView;
     private RecyclerView.Adapter recyclerAdapter;
 
     private ArrayList<Levels> levelList;
+
+    private Bitmap bitmap;
 
     public static LevelsFragment newInstance(int resId) {
         LevelsFragment levelsFragment = new LevelsFragment();
@@ -58,6 +62,7 @@ public class LevelsFragment extends Fragment implements ScreenShotable{
         View view = inflater.inflate(R.layout.levels_frament, container, false);
         levelList = new ArrayList<>();
 
+        containerView = (ViewGroup) view.findViewById(R.id.container);
         recyclerView = (RecyclerView) view.findViewById(R.id.levelListRecyler);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
@@ -77,6 +82,7 @@ public class LevelsFragment extends Fragment implements ScreenShotable{
 
             }
         }));
+
         recyclerAdapter = new LevelAdapter(getActivity(), levelList);
         recyclerView.setAdapter(recyclerAdapter);
 
@@ -110,17 +116,31 @@ public class LevelsFragment extends Fragment implements ScreenShotable{
             }
         });
 
+
+
         getActivity().setTitle(getString(R.string.level_list_navigation_title));
         return view;
     }
 
     @Override
     public void takeScreenShot() {
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                Bitmap bitmap = Bitmap.createBitmap(containerView.getWidth(),
+                        containerView.getHeight(), Bitmap.Config.ARGB_8888);
+                Canvas canvas = new Canvas(bitmap);
+                containerView.draw(canvas);
+                LevelsFragment.this.bitmap = bitmap;
+            }
+        };
+
+        thread.start();
 
     }
 
     @Override
     public Bitmap getBitmap() {
-        return null;
+        return bitmap;
     }
 }
