@@ -2,7 +2,6 @@ package com.noname.tmvien.kanjicards.fragment;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -124,19 +123,18 @@ public class LevelsFragment extends Fragment implements ScreenShotable{
 
     @Override
     public void takeScreenShot() {
-        Thread thread = new Thread() {
-            @Override
-            public void run() {
-                Bitmap bitmap = Bitmap.createBitmap(containerView.getWidth(),
-                        containerView.getHeight(), Bitmap.Config.ARGB_8888);
-                Canvas canvas = new Canvas(bitmap);
-                containerView.draw(canvas);
-                LevelsFragment.this.bitmap = bitmap;
-            }
-        };
-
-        thread.start();
-
+//        Thread thread = new Thread() {
+//            @Override
+//            public void run() {
+//                Bitmap bitmap = Bitmap.createBitmap(containerView.getWidth(),
+//                        containerView.getHeight(), Bitmap.Config.ARGB_8888);
+//                Canvas canvas = new Canvas(bitmap);
+//                containerView.draw(canvas);
+//                LevelsFragment.this.bitmap = bitmap;
+//            }
+//        };
+//
+//        thread.start();
     }
 
     @Override

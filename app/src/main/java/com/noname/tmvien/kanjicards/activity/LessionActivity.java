@@ -8,6 +8,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -52,6 +53,7 @@ public class LessionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         ActionBar bar = getSupportActionBar();
         bar.setBackgroundDrawable(this.getResources().getDrawable(R.color.aqua));
+        bar.setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.lession_activity);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -123,6 +125,12 @@ public class LessionActivity extends AppCompatActivity {
             }
         }
         setScreenTitle();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        finish();
+        return true;
     }
 
     private void setScreenTitle() {

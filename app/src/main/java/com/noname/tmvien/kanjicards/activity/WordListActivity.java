@@ -8,6 +8,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -60,6 +61,7 @@ public class WordListActivity extends AppCompatActivity {
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             window.setStatusBarColor(this.getResources().getColor(R.color.fern));
         }
+        bar.setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.word_activity);
         recyclerView = (RecyclerView) findViewById(R.id.wordListRecycler);
         novalueTextView = (TextView) findViewById(R.id.novalueTextView);
@@ -126,6 +128,12 @@ public class WordListActivity extends AppCompatActivity {
             }
         }
         setScreenTitle();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        finish();
+        return true;
     }
 
     private void setScreenTitle() {
