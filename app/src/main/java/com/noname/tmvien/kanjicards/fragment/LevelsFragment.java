@@ -33,7 +33,7 @@ import yalantis.com.sidemenu.interfaces.ScreenShotable;
  * Created by tmvien on 6/29/17.
  */
 
-public class LevelsFragment extends Fragment implements ScreenShotable{
+public class LevelsFragment extends Fragment implements ScreenShotable {
     private static final String TAG = LevelsFragment.class.getSimpleName();
 
     private FirebaseDatabase mFirebaseDatabase;
@@ -44,15 +44,6 @@ public class LevelsFragment extends Fragment implements ScreenShotable{
 
     private ArrayList<Levels> levelList;
 
-    private Bitmap bitmap;
-
-    public static LevelsFragment newInstance(int resId) {
-        LevelsFragment levelsFragment = new LevelsFragment();
-        Bundle bundle = new Bundle();
-        bundle.putInt(Integer.class.getName(), resId);
-        levelsFragment.setArguments(bundle);
-        return levelsFragment;
-    }
 
     @Nullable
     @Override
@@ -116,7 +107,6 @@ public class LevelsFragment extends Fragment implements ScreenShotable{
         });
 
 
-
         getActivity().setTitle(getString(R.string.level_list_navigation_title));
         return view;
     }
@@ -139,6 +129,6 @@ public class LevelsFragment extends Fragment implements ScreenShotable{
 
     @Override
     public Bitmap getBitmap() {
-        return bitmap;
+        return null;
     }
 }

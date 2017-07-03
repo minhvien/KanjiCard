@@ -20,7 +20,7 @@ import yalantis.com.sidemenu.interfaces.ScreenShotable;
  * Created by Konstantin on 12.01.2015.
  */
 public class ViewAnimator<T extends Resourceble> {
-    private final int ANIMATION_DURATION = 175;
+    private final int ANIMATION_DURATION = 100;
     public static final int CIRCULAR_REVEAL_ANIMATION_DURATION = 500;
 
     private AppCompatActivity appCompatActivity;
@@ -31,6 +31,8 @@ public class ViewAnimator<T extends Resourceble> {
     private ScreenShotable screenShotable;
     private DrawerLayout drawerLayout;
     private ViewAnimatorListener animatorListener;
+
+    private int menuItemIndex = -1;
 
 
     public ViewAnimator(AppCompatActivity activity,
@@ -58,6 +60,12 @@ public class ViewAnimator<T extends Resourceble> {
             viewMenu.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if(menuItemIndex == finalI){
+                        return;
+                    }
+                    if(finalI != 0) {
+                        menuItemIndex = finalI;
+                    }
                     int[] location = {0, 0};
                     v.getLocationOnScreen(location);
                     switchItem(list.get(finalI), location[1] + v.getHeight() / 2);
@@ -81,6 +89,9 @@ public class ViewAnimator<T extends Resourceble> {
                     }
                 }
             }, (long) delay);
+            if(menuItemIndex != -1 && position == menuItemIndex){
+                viewMenu.setSelected(true);
+            }
         }
 
     }

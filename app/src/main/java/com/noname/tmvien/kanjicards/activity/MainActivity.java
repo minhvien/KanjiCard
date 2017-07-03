@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -18,7 +19,7 @@ import android.widget.LinearLayout;
 import com.noname.tmvien.kanjicards.R;
 import com.noname.tmvien.kanjicards.fragment.KanjiFragment;
 import com.noname.tmvien.kanjicards.fragment.LevelsFragment;
-import com.noname.tmvien.kanjicards.fragment.MenuFragment;
+import com.noname.tmvien.kanjicards.utils.MenuContext;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,19 +37,19 @@ public class MainActivity extends AppCompatActivity implements ViewAnimator.View
     private static final String TAG = MainActivity.class.getSimpleName();
 
 
-
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
     private List<SlideMenuItem> list = new ArrayList<>();
     private ViewAnimator viewAnimator;
     private LinearLayout linearLayout;
+    private Fragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        LevelsFragment levelsFragment = LevelsFragment.newInstance(R.color.colorPrimary);
-        getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, levelsFragment).commit();
+        fragment = new LevelsFragment();
+        getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).commit();
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerLayout.setScrimColor(Color.TRANSPARENT);
@@ -57,26 +58,26 @@ public class MainActivity extends AppCompatActivity implements ViewAnimator.View
             @Override
             public void onClick(View v) {
                 drawerLayout.closeDrawers();
-                }
+            }
         });
 
         setActionBar();
         createMenuList();
-        viewAnimator = new ViewAnimator<>(this, list, levelsFragment, drawerLayout, this);
+        viewAnimator = new ViewAnimator<>(this, list, (LevelsFragment) fragment, drawerLayout, this);
     }
 
     private void createMenuList() {
-        SlideMenuItem menuItem0 = new SlideMenuItem(MenuFragment.CLOSE, R.drawable.icn_close);
+        SlideMenuItem menuItem0 = new SlideMenuItem(MenuContext.CLOSE, R.drawable.icn_close);
         list.add(menuItem0);
-        SlideMenuItem menuItem = new SlideMenuItem(MenuFragment.KANJI, R.drawable.menu_kanji_icon);
+        SlideMenuItem menuItem = new SlideMenuItem(MenuContext.KANJI, R.drawable.menu_kanji_icon);
         list.add(menuItem);
-        SlideMenuItem menuItem2 = new SlideMenuItem(MenuFragment.QUIZ, R.drawable.menu_quiz_icon);
+        SlideMenuItem menuItem2 = new SlideMenuItem(MenuContext.QUIZ, R.drawable.menu_quiz_icon);
         list.add(menuItem2);
-        SlideMenuItem menuItem3 = new SlideMenuItem(MenuFragment.RATE, R.drawable.menu_rating_icon);
+        SlideMenuItem menuItem3 = new SlideMenuItem(MenuContext.RATE, R.drawable.menu_rating_icon);
         list.add(menuItem3);
-        SlideMenuItem menuItem4 = new SlideMenuItem(MenuFragment.SETTING, R.drawable.menu_setting_icon);
+        SlideMenuItem menuItem4 = new SlideMenuItem(MenuContext.SETTING, R.drawable.menu_setting_icon);
         list.add(menuItem4);
-        SlideMenuItem menuItem5 = new SlideMenuItem(MenuFragment.ABOUT, R.drawable.menu_about_icon);
+        SlideMenuItem menuItem5 = new SlideMenuItem(MenuContext.ABOUT, R.drawable.menu_about_icon);
         list.add(menuItem5);
     }
 
@@ -101,7 +102,9 @@ public class MainActivity extends AppCompatActivity implements ViewAnimator.View
                 R.string.drawer_close  /* "close drawer" description */
         ) {
 
-            /** Called when a drawer has settled in a completely closed state. */
+            /**
+             * Called when a drawer has settled in a completely closed state.
+             */
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
                 linearLayout.removeAllViews();
@@ -115,13 +118,15 @@ public class MainActivity extends AppCompatActivity implements ViewAnimator.View
                     viewAnimator.showMenuContent();
             }
 
-            /** Called when a drawer has settled in a completely open state. */
+            /**
+             * Called when a drawer has settled in a completely open state.
+             */
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
             }
         };
         drawerLayout.setDrawerListener(drawerToggle);
-            }
+    }
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -129,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements ViewAnimator.View
         drawerToggle.syncState();
     }
 
-            @Override
+    @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         drawerToggle.onConfigurationChanged(newConfig);
@@ -144,33 +149,32 @@ public class MainActivity extends AppCompatActivity implements ViewAnimator.View
         findViewById(R.id.content_overlay).setBackground(new BitmapDrawable(getResources(), screenShotable.getBitmap()));
         animator.start();
         return screenShotable;
-                    }
+    }
 
     @Override
     public ScreenShotable onSwitch(Resourceble slideMenuItem, ScreenShotable screenShotable, int position) {
-        int primaryColorCanvas = R.color.colorPrimary;
 
         switch (slideMenuItem.getName()) {
-            case MenuFragment.CLOSE:
+            case MenuContext.CLOSE:
                 return screenShotable;
-            case MenuFragment.KANJI:
-                LevelsFragment levelsFragment = LevelsFragment.newInstance(primaryColorCanvas);
-                getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, levelsFragment).commit();
-                return replaceFragment(levelsFragment, position);
-            case MenuFragment.QUIZ:
-                KanjiFragment kanjiFragment = KanjiFragment.newInstance(primaryColorCanvas);
-                getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, kanjiFragment).commit();
-                return replaceFragment(kanjiFragment, position);
+            case MenuContext.KANJI:
+                fragment = new LevelsFragment();
+                getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).commit();
+                return replaceFragment((LevelsFragment) fragment, position);
+            case MenuContext.QUIZ:
+                fragment = new KanjiFragment();
+                getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).commit();
+                return replaceFragment((KanjiFragment) fragment, position);
             default:
                 return replaceFragment(screenShotable, position);
-                }
-            }
+        }
+    }
 
-            @Override
+    @Override
     public void disableHomeButton() {
         getSupportActionBar().setHomeButtonEnabled(false);
 
-            }
+    }
 
     @Override
     public void enableHomeButton() {
