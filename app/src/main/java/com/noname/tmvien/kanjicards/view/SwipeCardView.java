@@ -303,5 +303,4 @@ public class SwipeCardView extends ViewGroup {
         mAdapter.registerDataSetObserver(mDataObserver);
     }
 
-
 }
