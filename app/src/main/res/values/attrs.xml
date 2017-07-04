@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="SwipeCardView">
-        <attr name="card_corner_radius" format="float" />
-        <attr name="card_color" format="color" />
+        <attr name="number_of_visible_view" format="integer" />
+        <attr name="animation_duration" format="integer" />
+        <attr name="view_spacing" format="integer" />
+        <attr name="view_rotation" format="integer" />
     </declare-styleable>
 </resources>

@@ -3,11 +3,7 @@ package com.noname.tmvien.kanjicards.view;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.database.DataSetObserver;
-import android.graphics.Color;
 import android.os.Build;
-import android.os.Bundle;
-import android.os.Parcelable;
-import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +11,7 @@ import android.widget.Adapter;
 import android.widget.FrameLayout;
 
 import com.noname.tmvien.kanjicards.R;
+import com.noname.tmvien.kanjicards.utils.Log;
 
 import java.util.Random;
 
@@ -24,44 +21,33 @@ import java.util.Random;
 
 public class SwipeCardView extends ViewGroup {
 
-    public static final int SWIPE_DIRECTION_BOTH = 0;
-    public static final int SWIPE_DIRECTION_ONLY_LEFT = 1;
-    public static final int SWIPE_DIRECTION_ONLY_RIGHT = 2;
+    private static String LOG = "SwipeCardView";
+
 
     public static final int DEFAULT_ANIMATION_DURATION = 300;
-    public static final int DEFAULT_STACK_SIZE = 3;
-    public static final int DEFAULT_STACK_ROTATION = 8;
+    public static final int DEFAULT_VISIBLE_CARD = 3;
+    public static final int DEFAULT_CARD_ROTATION = 4;
     public static final float DEFAULT_SWIPE_ROTATION = 30f;
-    public static final float DEFAULT_SWIPE_OPACITY = 1f;
+    public static final int DEFAULT_VIEW_SPACING = 12;
     public static final float DEFAULT_SCALE_FACTOR = 1f;
     public static final boolean DEFAULT_DISABLE_HW_ACCELERATION = true;
 
-    private static final String KEY_SUPER_STATE = "superState";
-    private static final String KEY_CURRENT_INDEX = "currentIndex";
 
     private Adapter mAdapter;
     private Random mRandom;
 
-    private float mCardCornerRadius;
-    private int mCardColor;
-
-    private int mAllowedSwipeDirections;
     private int mAnimationDuration;
     private int mCurrentViewIndex;
-    private int mNumberOfStackedViews;
+    private int mNumberOfVisibleViews;
     private int mViewSpacing;
     private int mViewRotation;
     private float mSwipeRotation;
-    private float mSwipeOpacity;
     private float mScaleFactor;
     private boolean mDisableHwAcceleration;
-    private boolean mIsFirstLayout = true;
 
     private View mTopView;
     private SwipeHelper mSwipeHelper;
     private DataSetObserver mDataObserver;
-    private SwipeStackListener mListener;
-    private SwipeProgressListener mProgressListener;
 
     public SwipeCardView(Context context) {
         this(context, null);
@@ -81,20 +67,12 @@ public class SwipeCardView extends ViewGroup {
         TypedArray attrs = getContext().obtainStyledAttributes(attributeSet, R.styleable.SwipeCardView);
 
         try {
-            mCardCornerRadius =
-                    attrs.getFloat(R.styleable.CardView_cardCornerRadius,
-                            0);
-            mCardColor = attrs.getColor(R.styleable.SwipeCardView_card_color, Color.WHITE);
-
-            mAllowedSwipeDirections = SWIPE_DIRECTION_BOTH;
-            mAnimationDuration = DEFAULT_ANIMATION_DURATION;
-            mNumberOfStackedViews = DEFAULT_STACK_SIZE;
-            mViewSpacing = 12;
-            mViewRotation = DEFAULT_STACK_ROTATION;
-            mSwipeRotation = DEFAULT_SWIPE_ROTATION;
-            mSwipeOpacity = DEFAULT_SWIPE_OPACITY;
-            mScaleFactor = DEFAULT_SCALE_FACTOR;
-            mDisableHwAcceleration = DEFAULT_DISABLE_HW_ACCELERATION;
+            mAnimationDuration =
+                    attrs.getInteger(R.styleable.SwipeCardView_animation_duration,
+                            DEFAULT_ANIMATION_DURATION);
+            mNumberOfVisibleViews = attrs.getInteger(R.styleable.SwipeCardView_number_of_visible_view, DEFAULT_VISIBLE_CARD);
+            mViewSpacing = attrs.getInteger(R.styleable.SwipeCardView_view_spacing, DEFAULT_VIEW_SPACING);
+            mViewRotation = attrs.getInteger(R.styleable.SwipeCardView_view_rotation, DEFAULT_CARD_ROTATION);
         } finally {
             attrs.recycle();
         }
@@ -106,10 +84,15 @@ public class SwipeCardView extends ViewGroup {
         setClipToPadding(false);
         setClipChildren(false);
 
+        mSwipeRotation = DEFAULT_SWIPE_ROTATION;
+        mScaleFactor = DEFAULT_SCALE_FACTOR;
+        mDisableHwAcceleration = DEFAULT_DISABLE_HW_ACCELERATION;
+
         mSwipeHelper = new SwipeHelper(this);
         mSwipeHelper.setAnimationDuration(mAnimationDuration);
         mSwipeHelper.setRotation(mSwipeRotation);
-        mSwipeHelper.setOpacityEnd(mSwipeOpacity);
+
+
 
         mDataObserver = new DataSetObserver() {
             @Override
@@ -122,25 +105,6 @@ public class SwipeCardView extends ViewGroup {
     }
 
     @Override
-    public Parcelable onSaveInstanceState() {
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(KEY_SUPER_STATE, super.onSaveInstanceState());
-        bundle.putInt(KEY_CURRENT_INDEX, mCurrentViewIndex - getChildCount());
-        return bundle;
-    }
-
-    @Override
-    public void onRestoreInstanceState(Parcelable state) {
-        if (state instanceof Bundle) {
-            Bundle bundle = (Bundle) state;
-            mCurrentViewIndex = bundle.getInt(KEY_CURRENT_INDEX);
-            state = bundle.getParcelable(KEY_SUPER_STATE);
-        }
-
-        super.onRestoreInstanceState(state);
-    }
-
-    @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
 
         if (mAdapter == null || mAdapter.isEmpty()) {
@@ -150,56 +114,67 @@ public class SwipeCardView extends ViewGroup {
         }
 
         for (int x = getChildCount();
-             x < mNumberOfStackedViews && mCurrentViewIndex < mAdapter.getCount();
+             x < mNumberOfVisibleViews && mCurrentViewIndex + x < mAdapter.getCount();
              x++) {
-            addNextView();
+            addView(x + mCurrentViewIndex, true);
         }
 
         reorderItems();
 
-        mIsFirstLayout = false;
+        Log.e(LOG, "onLayout");
     }
 
-    private void addNextView() {
-        if (mCurrentViewIndex < mAdapter.getCount()) {
-            View bottomView = mAdapter.getView(mCurrentViewIndex, null, this);
 
-
-            if (!mDisableHwAcceleration) {
-                bottomView.setLayerType(LAYER_TYPE_HARDWARE, null);
+    private void addPreviousView() {
+        if (!isFirstCardDisplayed()) {
+            if (getChildCount() == mNumberOfVisibleViews) {
+                View lastCard = getChildAt(0);
+                removeCardView(lastCard);
             }
+            View topCard = addView(--mCurrentViewIndex, false);
+            topCard.setX(-getWidth() + topCard.getX());
+            topCard.setRotation(-mSwipeRotation);
 
-            if (mViewRotation > 0) {
-                bottomView.setRotation(mRandom.nextInt(mViewRotation) - (mViewRotation / 2));
-            }
-
-            int width = getWidth() - (getPaddingLeft() + getPaddingRight());
-            int height = getHeight() - (getPaddingTop() + getPaddingBottom());
-
-            LayoutParams params = bottomView.getLayoutParams();
-            if (params == null) {
-                params = new LayoutParams(
-                        FrameLayout.LayoutParams.WRAP_CONTENT,
-                        FrameLayout.LayoutParams.WRAP_CONTENT);
-            }
-
-            int measureSpecWidth = MeasureSpec.AT_MOST;
-            int measureSpecHeight = MeasureSpec.AT_MOST;
-
-            if (params.width == LayoutParams.MATCH_PARENT) {
-                measureSpecWidth = MeasureSpec.EXACTLY;
-            }
-
-            if (params.height == LayoutParams.MATCH_PARENT) {
-                measureSpecHeight = MeasureSpec.EXACTLY;
-            }
-
-            bottomView.measure(measureSpecWidth | width, measureSpecHeight | height);
-            addViewInLayout(bottomView, 0, params, true);
-
-            mCurrentViewIndex++;
+            reorderItems();
+            Log.e(LOG, "addPreviousView");
         }
     }
+
+    private View addView(int index, boolean isToLast) {
+        View cardView = mAdapter.getView(index, null, this);
+
+        if (!mDisableHwAcceleration) {
+            cardView.setLayerType(LAYER_TYPE_HARDWARE, null);
+        }
+
+        int width = getWidth() - (getPaddingLeft() + getPaddingRight());
+        int height = getHeight() - (getPaddingTop() + getPaddingBottom());
+
+        LayoutParams params = cardView.getLayoutParams();
+        if (params == null) {
+            params = new LayoutParams(
+                    FrameLayout.LayoutParams.WRAP_CONTENT,
+                    FrameLayout.LayoutParams.WRAP_CONTENT);
+        }
+
+        int measureSpecWidth = MeasureSpec.AT_MOST;
+        int measureSpecHeight = MeasureSpec.AT_MOST;
+
+        if (params.width == LayoutParams.MATCH_PARENT) {
+            measureSpecWidth = MeasureSpec.EXACTLY;
+        }
+
+        if (params.height == LayoutParams.MATCH_PARENT) {
+            measureSpecHeight = MeasureSpec.EXACTLY;
+        }
+
+        cardView.measure(measureSpecWidth | width, measureSpecHeight | height);
+        addViewInLayout(cardView, isToLast ? 0 : -1, params, true);
+
+        Log.e(LOG, "Add card at index: " + index);
+        return cardView;
+    }
+
 
     private void reorderItems() {
         for (int x = 0; x < getChildCount(); x++) {
@@ -216,6 +191,9 @@ public class SwipeCardView extends ViewGroup {
                     newPositionX + childView.getMeasuredWidth(),
                     getPaddingTop() + childView.getMeasuredHeight());
 
+
+
+
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 childView.setTranslationZ(x);
             }
@@ -225,36 +203,29 @@ public class SwipeCardView extends ViewGroup {
             if (x == topViewIndex) {
                 mSwipeHelper.unregisterObservedView();
                 mTopView = childView;
-                mSwipeHelper.registerObservedView(mTopView, newPositionX, newPositionY);
-            }
-
-            if (!mIsFirstLayout) {
-
-
-
-                childView.animate()
-                        .y(newPositionY)
-                        .scaleX(scaleFactor)
-                        .scaleY(scaleFactor)
-                        .alpha(1)
-                        .setDuration(mAnimationDuration);
-
+                mTopView.animate().rotation(0).setDuration(mAnimationDuration);
+                mSwipeHelper.registerObservedView(mTopView);
             } else {
-                childView.setY(newPositionY);
-                childView.setScaleY(scaleFactor);
-                childView.setScaleX(scaleFactor);
+                childView.animate().rotation(mRandom.nextInt(mViewRotation) - (mViewRotation / 2)).setDuration(mAnimationDuration);
             }
+            childView.animate()
+                    .x(newPositionX)
+                    .y(newPositionY)
+                    .scaleX(scaleFactor)
+                    .scaleY(scaleFactor)
+                    .alpha(1)
+                    .setDuration(mAnimationDuration);
         }
     }
 
     private void removeTopView() {
-        if (mTopView != null) {
-            removeView(mTopView);
-            mTopView = null;
-        }
+        removeCardView(mTopView);
+    }
 
-        if (getChildCount() == 0) {
-            if (mListener != null) mListener.onStackEmpty();
+    private void removeCardView(View cardView) {
+        if (cardView != null) {
+            removeView(cardView);
+            cardView = null;
         }
     }
 
@@ -265,36 +236,43 @@ public class SwipeCardView extends ViewGroup {
         setMeasuredDimension(width, height);
     }
 
-    public void onSwipeStart() {
-        if (mProgressListener != null) mProgressListener.onSwipeStart(getCurrentPosition());
-    }
-
-    public void onSwipeProgress(float progress) {
-        if (mProgressListener != null)
-            mProgressListener.onSwipeProgress(getCurrentPosition(), progress);
-    }
-
-    public void onSwipeEnd() {
-        if (mProgressListener != null) mProgressListener.onSwipeEnd(getCurrentPosition());
-    }
-
     public void onViewSwipedToLeft() {
-        if (mListener != null) mListener.onViewSwipedToLeft(getCurrentPosition());
+        mCurrentViewIndex++;
+        Log.d(LOG, "onViewSwipedToLeft");
         removeTopView();
     }
 
     public void onViewSwipedToRight() {
-        if (mListener != null) mListener.onViewSwipedToRight(getCurrentPosition());
-        removeTopView();
+        addPreviousView();
+        Log.d(LOG, "onViewSwipedToRight");
+    }
+
+    public void setCurrentViewIndex(int index) {
+        this.mCurrentViewIndex = index;
     }
 
     /**
-     * Returns the current adapter position.
+     * Check when top card view is the last card.
      *
-     * @return The current position.
+     * @return True if last card is top of viewgroup, otherwise false.
      */
-    public int getCurrentPosition() {
-        return mCurrentViewIndex - getChildCount();
+    public boolean isLastCardDisplayed() {
+        if (mCurrentViewIndex  == mAdapter.getCount() - 1) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Check when top card view is the first card.
+     *
+     * @return True if first card is top of viewgroup, otherwise false.
+     */
+    public boolean isFirstCardDisplayed() {
+        if (mCurrentViewIndex == 0) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -320,130 +298,5 @@ public class SwipeCardView extends ViewGroup {
         mAdapter.registerDataSetObserver(mDataObserver);
     }
 
-    /**
-     * Returns the allowed swipe directions.
-     *
-     * @return The currently allowed swipe directions.
-     */
-    public int getAllowedSwipeDirections() {
-        return mAllowedSwipeDirections;
-    }
 
-    /**
-     * Sets the allowed swipe directions.
-     *
-     * @param directions One of {@link #SWIPE_DIRECTION_BOTH},
-     *                   {@link #SWIPE_DIRECTION_ONLY_LEFT}, or {@link #SWIPE_DIRECTION_ONLY_RIGHT}.
-     */
-    public void setAllowedSwipeDirections(int directions) {
-        mAllowedSwipeDirections = directions;
-    }
-
-    /**
-     * Register a callback to be invoked when the user has swiped the top view
-     * left / right or when the stack gets empty.
-     *
-     * @param listener The callback that will run
-     */
-    public void setListener(@Nullable SwipeStackListener listener) {
-        mListener = listener;
-    }
-
-    /**
-     * Register a callback to be invoked when the user starts / stops interacting
-     * with the top view of the stack.
-     *
-     * @param listener The callback that will run
-     */
-    public void setSwipeProgressListener(@Nullable SwipeProgressListener listener) {
-        mProgressListener = listener;
-    }
-
-    /**
-     * Get the view from the top of the stack.
-     *
-     * @return The view if the stack is not empty or null otherwise.
-     */
-    public View getTopView() {
-        return mTopView;
-    }
-
-    /**
-     * Programmatically dismiss the top view to the right.
-     */
-    public void swipeTopViewToRight() {
-        if (getChildCount() == 0) return;
-        mSwipeHelper.swipeViewToRight();
-    }
-
-    /**
-     * Programmatically dismiss the top view to the left.
-     */
-    public void swipeTopViewToLeft() {
-        if (getChildCount() == 0) return;
-        mSwipeHelper.swipeViewToLeft();
-    }
-
-    /**
-     * Resets the current adapter position and repopulates the stack.
-     */
-    public void resetStack() {
-        mCurrentViewIndex = 0;
-        removeAllViewsInLayout();
-        requestLayout();
-    }
-
-    /**
-     * Interface definition for a callback to be invoked when the top view was
-     * swiped to the left / right or when the stack gets empty.
-     */
-    public interface SwipeStackListener {
-        /**
-         * Called when a view has been dismissed to the left.
-         *
-         * @param position The position of the view in the adapter currently in use.
-         */
-        void onViewSwipedToLeft(int position);
-
-        /**
-         * Called when a view has been dismissed to the right.
-         *
-         * @param position The position of the view in the adapter currently in use.
-         */
-        void onViewSwipedToRight(int position);
-
-        /**
-         * Called when the last view has been dismissed.
-         */
-        void onStackEmpty();
-    }
-
-    /**
-     * Interface definition for a callback to be invoked when the user
-     * starts / stops interacting with the top view of the stack.
-     */
-    public interface SwipeProgressListener {
-        /**
-         * Called when the user starts interacting with the top view of the stack.
-         *
-         * @param position The position of the view in the currently set adapter.
-         */
-        void onSwipeStart(int position);
-
-        /**
-         * Called when the user is dragging the top view of the stack.
-         *
-         * @param position The position of the view in the currently set adapter.
-         * @param progress Represents the horizontal dragging position in relation to
-         *                 the start position of the drag.
-         */
-        void onSwipeProgress(int position, float progress);
-
-        /**
-         * Called when the user has stopped interacting with the top view of the stack.
-         *
-         * @param position The position of the view in the currently set adapter.
-         */
-        void onSwipeEnd(int position);
-    }
 }

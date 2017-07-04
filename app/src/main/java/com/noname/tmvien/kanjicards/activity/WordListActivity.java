@@ -26,7 +26,6 @@ import com.noname.tmvien.kanjicards.listview.WordListAdapter;
 import com.noname.tmvien.kanjicards.models.Lessons;
 import com.noname.tmvien.kanjicards.models.Word;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,7 +74,10 @@ public class WordListActivity extends AppCompatActivity {
             public void onClick(View view, final int position) {
                 if (position < words.size()) {
                     Intent intent = new Intent(WordListActivity.this, WordCardActivity.class);
-                    intent.putExtra("Word", (Serializable) words.get(position));
+                    intent.putExtra("idLevel", idLevel);
+                    intent.putExtra("idLesson", idLesson);
+                    intent.putExtra("Lesson",  lesson);
+                    intent.putExtra("iCurrentWord", position);
                     startActivity(intent);
                 }
             }

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="cardColors">
+        <item>@color/orchid</item>
+        <item>@color/sky</item>
+        <item>@color/cantaloupe</item>
+        <item>@color/salmon</item>
+        <item>@color/grape</item>
+        <item>@color/aqua</item>
+        <item>@color/tangerine</item>
+        <item>@color/eggplant</item>
+        <item>@color/teal</item>
+        <item>@color/fern</item>
+    </array>
+</resources>
