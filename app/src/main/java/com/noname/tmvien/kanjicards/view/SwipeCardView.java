@@ -21,7 +21,7 @@ import java.util.Random;
 
 public class SwipeCardView extends ViewGroup {
 
-    private static String LOG = "SwipeCardView";
+    private static String TAG = SwipeCardView.class.getSimpleName();
 
 
     public static final int DEFAULT_ANIMATION_DURATION = 300;
@@ -121,7 +121,7 @@ public class SwipeCardView extends ViewGroup {
 
         reorderItems();
 
-        Log.e(LOG, "onLayout");
+        Log.e(TAG, "onLayout");
     }
 
 
@@ -136,7 +136,7 @@ public class SwipeCardView extends ViewGroup {
             topCard.setRotation(-mSwipeRotation);
 
             reorderItems();
-            Log.e(LOG, "addPreviousView");
+            Log.e(TAG, "addPreviousView");
         }
     }
 
@@ -171,7 +171,7 @@ public class SwipeCardView extends ViewGroup {
         cardView.measure(measureSpecWidth | width, measureSpecHeight | height);
         addViewInLayout(cardView, isToLast ? 0 : -1, params, true);
 
-        Log.e(LOG, "Add card at index: " + index);
+        Log.e(TAG, "Add card at index: " + index);
         return cardView;
     }
 
@@ -238,17 +238,22 @@ public class SwipeCardView extends ViewGroup {
 
     public void onViewSwipedToLeft() {
         mCurrentViewIndex++;
-        Log.d(LOG, "onViewSwipedToLeft");
+        Log.d(TAG, "onViewSwipedToLeft");
         removeTopView();
     }
 
     public void onViewSwipedToRight() {
         addPreviousView();
-        Log.d(LOG, "onViewSwipedToRight");
+        Log.d(TAG, "onViewSwipedToRight");
     }
 
     public void setCurrentViewIndex(int index) {
         this.mCurrentViewIndex = index;
+    }
+
+    public void onTouchCardView(){
+        //
+        Log.d(TAG, "on Click");
     }
 
     /**
