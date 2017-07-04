@@ -74,7 +74,7 @@ public class WordListActivity extends AppCompatActivity {
             @Override
             public void onClick(View view, final int position) {
                 if (position < words.size()) {
-                    Intent intent = new Intent(WordListActivity.this, DetailWordActivity.class);
+                    Intent intent = new Intent(WordListActivity.this, WordCardActivity.class);
                     intent.putExtra("Word", (Serializable) words.get(position));
                     startActivity(intent);
                 }
