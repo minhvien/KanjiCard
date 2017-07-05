@@ -20,6 +20,8 @@ public class FlipAnimation extends Animation {
     private float centerY;
 
     private boolean forward = true;
+    private boolean isFlip = false;
+    private TransitionEventListener mListener;
 
     /**
      * Creates a 3D flip animation between two views.
@@ -36,6 +38,9 @@ public class FlipAnimation extends Animation {
         setInterpolator(new AccelerateDecelerateInterpolator());
     }
 
+    public void setListener(TransitionEventListener listener){
+        mListener = listener;
+    }
     public void reverse() {
         forward = false;
         View switchView = toView;
@@ -66,6 +71,12 @@ public class FlipAnimation extends Animation {
             degrees -= 180.f;
             fromView.setVisibility(View.GONE);
             toView.setVisibility(View.VISIBLE);
+            if(!isFlip){
+                isFlip = true;
+                if(mListener != null)
+                    mListener.onTransition(toView);
+            }
+
         }
 
         if (forward)
@@ -78,5 +89,9 @@ public class FlipAnimation extends Animation {
         camera.restore();
         matrix.preTranslate(-centerX, -centerY);
         matrix.postTranslate(centerX, centerY);
+    }
+
+    public interface TransitionEventListener{
+        void onTransition(View v);
     }
 }

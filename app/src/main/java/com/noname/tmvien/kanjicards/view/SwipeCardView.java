@@ -11,6 +11,7 @@ import android.widget.Adapter;
 import android.widget.FrameLayout;
 
 import com.noname.tmvien.kanjicards.R;
+import com.noname.tmvien.kanjicards.listview.SwipeCardAdapter;
 import com.noname.tmvien.kanjicards.utils.Log;
 
 import java.util.Random;
@@ -93,7 +94,6 @@ public class SwipeCardView extends ViewGroup {
         mSwipeHelper.setRotation(mSwipeRotation);
 
 
-
         mDataObserver = new DataSetObserver() {
             @Override
             public void onChanged() {
@@ -106,7 +106,7 @@ public class SwipeCardView extends ViewGroup {
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
-
+        Log.d(TAG, "onLayout");
         if (mAdapter == null || mAdapter.isEmpty()) {
             mCurrentViewIndex = 0;
             removeAllViewsInLayout();
@@ -120,12 +120,11 @@ public class SwipeCardView extends ViewGroup {
         }
 
         reorderItems();
-
-        Log.e(TAG, "onLayout");
     }
 
 
     private void addPreviousView() {
+        Log.d(TAG, "addPreviousView");
         if (!isFirstCardDisplayed()) {
             if (getChildCount() == mNumberOfVisibleViews) {
                 View lastCard = getChildAt(0);
@@ -136,11 +135,11 @@ public class SwipeCardView extends ViewGroup {
             topCard.setRotation(-mSwipeRotation);
 
             reorderItems();
-            Log.e(TAG, "addPreviousView");
         }
     }
 
     private View addView(int index, boolean isToLast) {
+        Log.d(TAG, "Add card at index: " + index);
         View cardView = mAdapter.getView(index, null, this);
 
         if (!mDisableHwAcceleration) {
@@ -171,7 +170,7 @@ public class SwipeCardView extends ViewGroup {
         cardView.measure(measureSpecWidth | width, measureSpecHeight | height);
         addViewInLayout(cardView, isToLast ? 0 : -1, params, true);
 
-        Log.e(TAG, "Add card at index: " + index);
+
         return cardView;
     }
 
@@ -190,8 +189,6 @@ public class SwipeCardView extends ViewGroup {
                     getPaddingTop(),
                     newPositionX + childView.getMeasuredWidth(),
                     getPaddingTop() + childView.getMeasuredHeight());
-
-
 
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -251,10 +248,24 @@ public class SwipeCardView extends ViewGroup {
         this.mCurrentViewIndex = index;
     }
 
-    public void onTouchCardView(){
-        //
-        Log.d(TAG, "on Click");
+    public void onTouchCardView() {
+        FlipAnimation flipAnimation = new FlipAnimation(mTopView, mTopView);
+
+
+        if (mTopView.getVisibility() == View.GONE) {
+            flipAnimation.reverse();
+        }
+        mTopView.startAnimation(flipAnimation);
+
+        flipAnimation.setListener(new FlipAnimation.TransitionEventListener() {
+            @Override
+            public void onTransition(View v) {
+                SwipeCardAdapter.CardViewHolder holder = (SwipeCardAdapter.CardViewHolder) v.getTag();
+                holder.switchView();
+            }
+        });
     }
+
 
     /**
      * Check when top card view is the last card.
@@ -262,7 +273,7 @@ public class SwipeCardView extends ViewGroup {
      * @return True if last card is top of viewgroup, otherwise false.
      */
     public boolean isLastCardDisplayed() {
-        if (mCurrentViewIndex  == mAdapter.getCount() - 1) {
+        if (mCurrentViewIndex == mAdapter.getCount() - 1) {
             return true;
         }
         return false;
