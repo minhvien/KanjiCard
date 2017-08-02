@@ -1,11 +1,17 @@
 package com.noname.tmvien.kanjicards.activity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.ListView;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -14,12 +20,13 @@ import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.noname.tmvien.kanjicards.R;
+import com.noname.tmvien.kanjicards.listview.ItemClickListener;
 import com.noname.tmvien.kanjicards.listview.LessonAdapter;
-import com.noname.tmvien.kanjicards.listview.LevelAdapter;
+import com.noname.tmvien.kanjicards.listview.RecyclerTouchListener;
 import com.noname.tmvien.kanjicards.models.Lessons;
 import com.noname.tmvien.kanjicards.models.Levels;
-import com.noname.tmvien.kanjicards.utils.Log;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,9 +38,12 @@ public class LessionActivity extends AppCompatActivity {
     private final static String TAG = LessionActivity.class.getSimpleName();
 
     private List<Lessons> lessonList;
-    private ListView lessonListView;
+
     private TextView novalueTextView;
-    private LessonAdapter lessonAdapter;
+
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter recyclerAdapter;
+
     private FirebaseDatabase mFirebaseDatabase;
     private Levels level;
 
@@ -41,38 +51,93 @@ public class LessionActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ActionBar bar = getSupportActionBar();
+        bar.setBackgroundDrawable(this.getResources().getDrawable(R.color.aqua));
+        bar.setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.lession_activity);
 
-        lessonListView = (ListView) findViewById(R.id.lession_list);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.setStatusBarColor(this.getResources().getColor(R.color.aqua));
+        }
+        recyclerView = (RecyclerView) findViewById(R.id.lessonListRecycler);
         novalueTextView = (TextView) findViewById(R.id.novalueTextView);
 
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(this,
+                recyclerView, new ItemClickListener() {
+            @Override
+            public void onClick(View view, final int position) {
+                Intent intent = new Intent(LessionActivity.this, WordListActivity.class);
+                intent.putExtra("idLevel", level.getId());
+                intent.putExtra("idLesson", lessonList.get(position).getId());
+                intent.putExtra("Lesson",  (Serializable) lessonList.get(position));
+                startActivity(intent);
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+
+            }
+        }));
+
         Intent intent = getIntent();
-        if(intent != null){
+        if (intent != null) {
             level = (Levels) intent.getSerializableExtra("level");
+
+            if (level != null && level.getLessons() != null && level.getLessons().size() > 0) {
+                lessonList = new ArrayList<>();
+                recyclerAdapter = new LessonAdapter(getApplicationContext(), lessonList);
+                recyclerView.setAdapter(recyclerAdapter);
+
+                mFirebaseDatabase = FirebaseDatabase.getInstance();
+
+                mFirebaseDatabase.getReference("levels").child(level.getId()).child("lessons").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        lessonList.clear();
+                        for (DataSnapshot item : dataSnapshot.getChildren()) {
+                            try {
+                                Lessons lesson = item.getValue(Lessons.class);
+                                if (lesson == null) {
+                                    return;
+                                }
+                                lesson.setId(item.getKey());
+                                lessonList.add(lesson);
+                                level.setLessons(lessonList);
+                                recyclerAdapter.notifyDataSetChanged();
+                            } catch (DatabaseException ex) {
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        novalueTextView.setVisibility(View.VISIBLE);
+                    }
+                });
+
+            } else {
+                novalueTextView.setVisibility(View.VISIBLE);
+            }
         }
-
-        if(level != null) {
-            lessonList = new ArrayList<>();
-            lessonAdapter = new LessonAdapter(getApplicationContext(), lessonList);
-            lessonListView.setAdapter(lessonAdapter);
-
-            mFirebaseDatabase = FirebaseDatabase.getInstance();
-
-            mFirebaseDatabase.getReference("levels").child(level.getId()).addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    lessonList.clear();
-                    Levels level = dataSnapshot.getValue(Levels.class);
-                    lessonAdapter = new LessonAdapter(getApplicationContext(), level.getLessions());
-                    lessonListView.setAdapter(lessonAdapter);
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-        }
+        setScreenTitle();
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        finish();
+        return true;
+    }
+
+    private void setScreenTitle() {
+        if (level != null) {
+            setTitle("Level " + level.getJlpt());
+        } else {
+            setTitle(R.string.lesson_list_navigation_title);
+        }
+    }
 }

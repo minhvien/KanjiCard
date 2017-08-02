@@ -12,7 +12,7 @@ import java.util.List;
 public class Levels implements Serializable{
 
     private int jlpt;
-    private List<Lessons> lessions;
+    private List<Lessons> lessons;
     private String id;
 
     public String getId() {
@@ -23,12 +23,12 @@ public class Levels implements Serializable{
         this.id = id;
     }
 
-    public List<Lessons> getLessions() {
-        return lessions;
+    public List<Lessons> getLessons() {
+        return lessons;
     }
 
-    public void setLessions(List<Lessons> lessions) {
-        this.lessions = lessions;
+    public void setLessons(List<Lessons> lessons) {
+        this.lessons = lessons;
     }
 
     public int getJlpt() {
@@ -38,13 +38,5 @@ public class Levels implements Serializable{
     public void setJlpt(int jlpt) {
         this.jlpt = jlpt;
     }
-
-//    @Exclude
-//    public Map<String, Object> toMap(){
-//        HashMap<String, Object> result = new HashMap<>();
-//        result.put("jlpt", jlpt);
-//        result.put("lessions", lessions);
-//        return result;
-//    }
 }
 

@@ -11,6 +11,7 @@ import java.util.List;
 @IgnoreExtraProperties
 public class Word implements Serializable {
 
+    private String id;
     private String components;
     private List<Word> example;
     private String han;
@@ -20,9 +21,17 @@ public class Word implements Serializable {
     private List<String> mean;
     private List<String> on;
     private int order;
-    private String sortMean;
+    private String shortMean;
     private String strokes;
     private String hiragana;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getComponents() {
         return components;
@@ -96,12 +105,12 @@ public class Word implements Serializable {
         this.order = order;
     }
 
-    public String getSortMean() {
-        return sortMean;
+    public String getShortMean() {
+        return shortMean;
     }
 
-    public void setSortMean(String sortMean) {
-        this.sortMean = sortMean;
+    public void setShortMean(String shortMean) {
+        this.shortMean = shortMean;
     }
 
     public String getStrokes() {
@@ -112,11 +121,11 @@ public class Word implements Serializable {
         this.strokes = strokes;
     }
 
-    public String getHiragana(){
+    public String getHiragana() {
         return hiragana;
     }
 
-    public void setHiragana(String hiragana){
+    public void setHiragana(String hiragana) {
         this.hiragana = hiragana;
     }
 }
